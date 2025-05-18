@@ -1,0 +1,15 @@
+Outlook,Temperature,Humidity,Class
+Sunny,Hot,Low,Play
+Sunny,Hot,High,Dont Play
+Sunny,Hot,High,Dont Play
+Sunny,Mild,High,Dont Play
+Sunny,Mild,Low,Play
+Overcast,Mild,High,Play
+Overcast,Hot,High,Play
+Overcast,Mild,Low,Play
+Overcast,Hot,High,Play
+Rain,Mild,High,Dont Play
+Rain,Mild,Low,Dont Play
+Rain,Hot,High,Play
+Rain,Mild,High,Play
+Rain,Mild,High,Play
