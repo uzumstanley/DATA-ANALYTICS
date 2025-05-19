@@ -1,0 +1,304 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "name": "Week 10.ipynb",
+      "provenance": [],
+      "collapsed_sections": []
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "source": [
+        "##Association Rule Mining\n",
+        "The aim of this lab is to explore **Association Rule Mining**. We will use several transaction records to determine the Association or, effective associations among the items purchased by the customers. We can consider that the associations/relations we determine, will help the business organization we are working for. This business organization should then be able to set and implement item display layout more effectively for their shop."
+      ],
+      "metadata": {
+        "id": "m2EsAoQrAhHN"
+      }
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "##Libraries Used\n",
+        "The libraries we will use here are:\n",
+        "\n",
+        "\n",
+        "*   NumPy\n",
+        "*   Pandas\n",
+        "*   Matplotlib\n",
+        "*   Seaborn\n",
+        "*   Transaction Encoder\n",
+        "*   Apriori,Association Rules\n",
+        "\n",
+        "Let's first import the useful libraries \n",
+        "\n",
+        "\n",
+        "\n",
+        "\n",
+        "\n"
+      ],
+      "metadata": {
+        "id": "8fyd0sOoB2a4"
+      }
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 1,
+      "metadata": {
+        "id": "V4JxEhsTAdg0"
+      },
+      "outputs": [],
+      "source": [
+        "import numpy as np \n",
+        "import pandas as pd\n",
+        "pd.set_option('display.max_rows', None)\n",
+        "from matplotlib import pyplot as plt\n",
+        "%matplotlib inline\n",
+        "import seaborn as sns\n",
+        "sns.set_style('whitegrid')\n",
+        "from mlxtend.preprocessing import TransactionEncoder\n",
+        "from mlxtend.frequent_patterns import apriori, association_rules"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "#The Dataset\n",
+        "We will now import the dataset. Assume, the business organization currently wants us to analyse the dataset that contains their Day One transactions in **Market_Basket_DayOneTransaction.csv** file. So, let's import the file!"
+      ],
+      "metadata": {
+        "id": "TcAiX2qhBwF1"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "market_basket_df = pd.read_csv('./Market_Basket_DayOneTransactions.csv', header=None)\n",
+        "market_basket_df.head()\n",
+        "#market_basket_df.shape"
+      ],
+      "metadata": {
+        "id": "Wv4WUmZTEsZ4"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "We will extract the items of each transaction in a list. Any NULL values are represented as NaN in pandas dataframe, so, we will exclude the \"NaN\"s in our list."
+      ],
+      "metadata": {
+        "id": "yM9WCIcUF4Uy"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "basket_items = []\n",
+        "for index, row in market_basket_df.iterrows():\n",
+        "   cleansed_items = [item for item in row if str(item)!='nan']\n",
+        "   basket_items.append(cleansed_items)\n",
+        "basket_items"
+      ],
+      "metadata": {
+        "id": "Rp0C8LtdH3m9"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "We will now use Transaction Encoder to load the listed items in a dataframe."
+      ],
+      "metadata": {
+        "id": "hzs_hpF_IHFj"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "tran_encod = TransactionEncoder()\n",
+        "tran_encod_list = tran_encod.fit(basket_items).transform(basket_items)\n",
+        "transaction_df = pd.DataFrame(tran_encod_list, columns=tran_encod.columns_)\n",
+        "#transaction_df.shape\n",
+        "transaction_df.head()"
+      ],
+      "metadata": {
+        "id": "5AtRAKMrITLX"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Before we go to find the associations between the items, we now need to first see the frequency of each item in the dataset distinctly. In order to see which items are bought most frequently, we will also sort this list in the decreasing order of their items' frequencies."
+      ],
+      "metadata": {
+        "id": "sgwFRlLGLFAJ"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "item_count = {}\n",
+        "for col in transaction_df.columns:\n",
+        "    item_count[col] = transaction_df[col].sum()\n",
+        "item_freq_df = pd.DataFrame(data=list(item_count.values()), index=list(item_count.keys()), columns=['frequency']).sort_values(by='frequency', ascending=False)\n",
+        "item_freq_df.shape, item_freq_df.head(10)"
+      ],
+      "metadata": {
+        "id": "UyY1-rpxLVlC"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "For better understanding, we may even plot the items on a graph to visually check the frequencies of them."
+      ],
+      "metadata": {
+        "id": "g8G-8avxLkga"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "plt.figure(figsize=(16,7))\n",
+        "sns.barplot(y=item_freq_df.index[:10], x=item_freq_df.frequency[:10])\n",
+        "plt.xticks(rotation=90)"
+      ],
+      "metadata": {
+        "id": "dwnP6ibbLx57"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Now for each itemset, we will estimate the support. Remember, the support threshold is something that we decide about. Here, We have taken support threshold as 10%."
+      ],
+      "metadata": {
+        "id": "LToJFbZBNEQG"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "apriori(transaction_df, min_support=0.1, use_colnames=True)"
+      ],
+      "metadata": {
+        "id": "DmotPHypNglq"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Our store has 120 items but using 10% as Support Threshold means we are looking at 7 elements in the above code cell that are present in atleast 310 transactions out of the 3100 transacions in the dataset. The store owner wants to increase their profit and one way of doing that will be to know how to better sell most of the 120 items that are sold by the store. \n",
+        "\n",
+        "This can be done by asssuring greater number of items being picked up by the Apriori algorithm. This can be done by lowering the Support Threshold so that we get more number of association rules for a good proportion of the 120 items the store sells.  \n",
+        "\n",
+        "We can check how many items are there in different range of frequencies. Knowing this will help us to decide about the support as well as confidence threshold percentages that will make proper business sense."
+      ],
+      "metadata": {
+        "id": "HTJT9yCKN5MD"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "print(f'freq>200: {item_freq_df[item_freq_df.frequency>200].shape[0]} items')\n",
+        "print(f'freq>100: {item_freq_df[item_freq_df.frequency>100].shape[0]} items')\n",
+        "print(f'freq>50: {item_freq_df[item_freq_df.frequency>50].shape[0]} items')"
+      ],
+      "metadata": {
+        "id": "S9eLjiVyOPTJ"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "So, we can assume that if the frquency limit is between 50 and 100, we should get around 50 items, which will cover nearly half the collection of items in the store. This can be achieved by setting the Support Threshold to 3%."
+      ],
+      "metadata": {
+        "id": "DHPdOaFTc1cL"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "freq_itemset_support = apriori(transaction_df, min_support=0.03, use_colnames=True)\n",
+        "freq_itemset_support"
+      ],
+      "metadata": {
+        "id": "CI5k1pTVOg8c"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Let's estimate the confidence for the rules that we have generated now. Again, this decision is motivated in light of business aspects and also based on the dataset at hand. This is such a dataset where the **variability** of the transactions is high, meaning that there are very few associations between items from different transactions, hence, we cannot be very certain about the quality of our association rules for this dataset as any Confidence Threshold above 44% will not produce any rules at all.\n",
+        "\n",
+        "In such scenarios, it is preferred to have a considerably large number of rules that covers as many of the items in the store as possible and that can be achieved by reducing the Cnfidence Threshold to a resonable amount, in our case, we have taken it as 20%.\n",
+        "\n",
+        "You already know about the Support, Confidence, Lift as Measuring metrics that we used for determining the Association Rules. However, Leverage and Conviction are other metrics that you can explore further later."
+      ],
+      "metadata": {
+        "id": "0IcGA7stOu6O"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "overal_association_rules = association_rules(freq_itemset_support, metric=\"confidence\", min_threshold=0.20)\n",
+        "overal_association_rules"
+      ],
+      "metadata": {
+        "id": "XX8neBikO6hq"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "#Question:1\n",
+        "Determine the rule set(s) for the \"DayTwo\" Transactions. You are advised to check and adjust the threshold values you select for both Support and Confidence to determine the maximum possible Rules/Rulesets."
+      ],
+      "metadata": {
+        "id": "aPN0AMvyTvfG"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        ""
+      ],
+      "metadata": {
+        "id": "o4Fb02s4URtE"
+      },
+      "execution_count": null,
+      "outputs": []
+    }
+  ]
+}
