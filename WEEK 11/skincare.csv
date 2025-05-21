@@ -1,0 +1,44 @@
+Customer ID,Skin Type,Product Type,Brand,Price Range
+1,Oily,Moisturizer,Neutrogena,Affordable
+2,Dry,Cleanser,Cetaphil,Mid-Range
+3,Combination,Serum,The Ordinary,Affordable
+4,Sensitive,Sunscreen,La Roche-Posay,Mid-Range
+5,Oily,Moisturizer,CeraVe,Affordable
+6,Combination,Cleanser,Olay,Affordable
+7,Dry,Serum,Estee Lauder,Luxury
+8,Sensitive,Sunscreen,Aveeno,Mid-Range
+9,Combination,Moisturizer,Kiehl's,Mid-Range
+10,Oily,Cleanser,Garnier,Affordable
+11,Sensitive,Serum,Sunday Riley,Luxury
+12,Combination,Sunscreen,Bioderma,Mid-Range
+13,Dry,Moisturizer,L'Oreal Paris,Affordable
+14,Sensitive,Cleanser,Avene,Mid-Range
+15,Combination,Serum,The Inkey List,Affordable
+16,Oily,Sunscreen,La Roche-Posay,Mid-Range
+17,Dry,Moisturizer,Olay,Mid-Range
+18,Combination,Cleanser,Cetaphil,Affordable
+19,Sensitive,Serum,Dermalogica,Luxury
+20,Oily,Sunscreen,Neutrogena,Affordable
+21,Combination,Moisturizer,Bioderma,Mid-Range
+22,Dry,Cleanser,CeraVe,Affordable
+23,Sensitive,Serum,Drunk Elephant,Luxury
+24,Combination,Sunscreen,Supergoop!,Mid-Range
+25,Oily,Moisturizer,The Body Shop,Mid-Range
+26,Dry,Cleanser,Neutrogena,Affordable
+27,Combination,Serum,Vichy,Mid-Range
+28,Sensitive,Sunscreen,Aveeno,Mid-Range
+29,Oily,Moisturizer,L'Oreal Paris,Affordable
+30,Combination,Cleanser,Neutrogena,Affordable
+31,Dry,Serum,Lancome,Luxury
+32,Sensitive,Sunscreen,EltaMD,Mid-Range
+33,Oily,Cleanser,CeraVe,Affordable
+34,Combination,Serum,Paula's Choice,Mid-Range
+35,Dry,Moisturizer,Aveeno,Mid-Range
+36,Sensitive,Cleanser,Cetaphil,Affordable
+37,Combination,Sunscreen,Neutrogena,Affordable
+38,Oily,Serum,The Ordinary,Affordable
+39,Combination,Moisturizer,Olay,Mid-Range
+40,Dry,Sunscreen,La Roche-Posay,Mid-Range
+41,Sensitive,Moisturizer,First Aid Beauty,Mid-Range
+42,Oily,Sunscreen,EltaMD,Mid-Range
+43,Combination,Cleanser,Garnier,Affordable
